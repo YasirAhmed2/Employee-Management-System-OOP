@@ -2,32 +2,20 @@
 #include <sqlite3.h>
 #include "Employee.h"
 using namespace std;
-// Simple user authentication function
-bool authenticateUser()
-{
-    string username, password;
-   cout << "Enter username: ";
-    cin >> username;
-    cout << "Enter password: ";
-    cin >> password;
-    // Check for correct credentials (this is for demonstration; do not use in production)
-    return (username == "admin" && password == "admin123");
-}
+bool authenticateUser();
 int main()
 {
-    // Authenticate the user
     if (!authenticateUser())
     {
-        cout << "Authentication failed!" <<endl;
+        cout << "Authentication failed!" << endl;
         return 1;
     }
     sqlite3 *db;
     if (sqlite3_open("employee.db", &db))
     {
-        cout << "Can't open database: " << sqlite3_errmsg(db) << std::endl;
+        cout << "Can't open database: " << sqlite3_errmsg(db) << endl;
         return 1;
     }
-    // Create the employee table if it doesn't exist
     Employee::createTable(db);
     int choice;
     do
@@ -53,18 +41,18 @@ int main()
             cout << "Enter position: ";
             cin >> position;
             cout << "Enter salary: ";
-        cin >> salary;
+            cin >> salary;
             Employee emp(0, name, position, salary);
             if (emp.addEmployee(db))
             {
-                cout << "Employee added successfully!" <<endl;
+                cout << "Employee added successfully!" << endl;
             }
             break;
         }
         case 2:
         {
             int id;
-          string name, position;
+            string name, position;
             float salary;
             cout << "Enter employee ID to modify: ";
             cin >> id;
@@ -98,7 +86,7 @@ int main()
             break;
         case 5:
         {
-           string searchQuery;
+            string searchQuery;
             cout << "Enter name or position to search: ";
             cin >> searchQuery;
             Employee::searchEmployee(db, searchQuery);
@@ -116,4 +104,13 @@ int main()
     } while (choice != 7);
     sqlite3_close(db);
     return 0;
+}
+bool authenticateUser()
+{
+    string username, password;
+    cout << "Enter username: ";
+    cin >> username;
+    cout << "Enter password: ";
+    cin >> password;
+    return (username == "admin" && password == "admin123");
 }

@@ -3,26 +3,24 @@
 #include <iostream>
 #include <sqlite3.h>
 #include <fstream>
+using namespace std;
 class Employee
 {
 private:
     int id;
-    std::string name;
-    std::string position;
+    string name;
+    string position;
     float salary;
 
 public:
-    // Constructor
-    Employee(int id, const std::string &name, const std::string &position, float salary);
-    // Getters and Setters
+    Employee(int id, const string &name, const string &position, float salary);
     int getId() const;
-    std::string getName() const;
-    std::string getPosition() const;
+    string getName() const;
+    string getPosition() const;
     float getSalary() const;
-    void setName(const std::string &name);
-    void setPosition(const std::string &position);
+    void setName(const string &name);
+    void setPosition(const string &position);
     void setSalary(float salary);
-    // Database operations
     static bool createTable(sqlite3 *db);
     bool addEmployee(sqlite3 *db);
     bool modifyEmployee(sqlite3 *db);
@@ -31,4 +29,4 @@ public:
     static void exportToCSV(sqlite3 *db);
     static void searchEmployee(sqlite3 *db, const std::string &searchQuery);
 };
-#endif // EMPLOYEE_H
+#endif

@@ -1,6 +1,6 @@
 #include "Employee.h"
 using namespace std;
-Employee::Employee(int id, const std::string &name, const std::string &position, float salary)
+Employee::Employee(int id, const string &name, const string &position, float salary)
     : id(id), name(name), position(position), salary(salary) {}
 int Employee::getId() const
 {
@@ -18,11 +18,11 @@ float Employee::getSalary() const
 {
     return salary;
 }
-void Employee::setName(const std::string &name)
+void Employee::setName(const string &name)
 {
     this->name = name;
 }
-void Employee::setPosition(const std::string &position)
+void Employee::setPosition(const string &position)
 {
     this->position = position;
 }
@@ -49,13 +49,13 @@ bool Employee::createTable(sqlite3 *db)
 }
 bool Employee::addEmployee(sqlite3 *db)
 {
-    std::string sql = "INSERT INTO Employee (name, position, salary) VALUES ('" +
-                      name + "', '" + position + "', " + std::to_string(salary) + ");";
+    string sql = "INSERT INTO Employee (name, position, salary) VALUES ('" +
+                 name + "', '" + position + "', " + to_string(salary) + ");";
     char *errMsg = 0;
     int rc = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &errMsg);
     if (rc != SQLITE_OK)
     {
-      cout << "SQL error: " << errMsg << endl;
+        cout << "SQL error: " << errMsg << endl;
         sqlite3_free(errMsg);
         return false;
     }
@@ -63,13 +63,13 @@ bool Employee::addEmployee(sqlite3 *db)
 }
 bool Employee::modifyEmployee(sqlite3 *db)
 {
-    std::string sql = "UPDATE Employee SET name = '" + name + "', position = '" + position +
-                      "', salary = " + std::to_string(salary) + " WHERE id = " + std::to_string(id) + ";";
+    string sql = "UPDATE Employee SET name = '" + name + "', position = '" + position +
+                 "', salary = " + to_string(salary) + " WHERE id = " + to_string(id) + ";";
     char *errMsg = 0;
     int rc = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &errMsg);
     if (rc != SQLITE_OK)
     {
-        std::cerr << "SQL error: " << errMsg << std::endl;
+        cout << "SQL error: " << errMsg << endl;
         sqlite3_free(errMsg);
         return false;
     }
@@ -77,7 +77,7 @@ bool Employee::modifyEmployee(sqlite3 *db)
 }
 bool Employee::deleteEmployee(sqlite3 *db)
 {
-    std::string sql = "DELETE FROM Employee WHERE id = " + std::to_string(id) + ";";
+    string sql = "DELETE FROM Employee WHERE id = " + to_string(id) + ";";
     char *errMsg = 0;
     int rc = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &errMsg);
     if (rc != SQLITE_OK)
@@ -96,15 +96,15 @@ void Employee::displayEmployees(sqlite3 *db)
     {
         for (int i = 0; i < argc; i++)
         {
-         cout << azColName[i] << ": " << (argv[i] ? argv[i] : "NULL") << "\t";
+            cout << azColName[i] << ": " << (argv[i] ? argv[i] : "NULL") << "\t";
         }
-       cout << endl;
+        cout << endl;
         return 0;
     };
     int rc = sqlite3_exec(db, sql, callback, nullptr, &errMsg);
     if (rc != SQLITE_OK)
     {
-      cout << "SQL error: " << errMsg << endl;
+        cout << "SQL error: " << errMsg << endl;
         sqlite3_free(errMsg);
     }
 }
@@ -136,10 +136,10 @@ void Employee::exportToCSV(sqlite3 *db)
     file.close();
     cout << "Data exported to employees.csv successfully!" << std::endl;
 }
-void Employee::searchEmployee(sqlite3 *db, const std::string &searchQuery)
+void Employee::searchEmployee(sqlite3 *db, const string &searchQuery)
 {
     string sql = "SELECT * FROM Employee WHERE name LIKE '%" + searchQuery +
-                      "%' OR position LIKE '%" + searchQuery + "%';";
+                 "%' OR position LIKE '%" + searchQuery + "%';";
     char *errMsg = 0;
     auto callback = [](void *, int argc, char **argv, char **azColName) -> int
     {
